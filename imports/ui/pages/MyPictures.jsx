@@ -11,18 +11,38 @@ class MyPictures extends Component {
     super(props);
 
     this.state = {
-      showModal: false
+      showModal: false,
+      modalTitle: '',
+      modalUrl: ''
     };
   }
 
   closeModal() {
-    console.log('Close...');
     this.setState({ showModal: false });
   }
 
   openModal() {
-    console.log('open...');
     this.setState({ showModal: true });
+  }
+
+  handleChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value
+    });
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    console.log(this.state.modalTitle, this.state.modalUrl);
+    this.setState({
+      modalTitle: '',
+      modalUrl: ''
+    });
+    this.closeModal();
   }
 
   renderPictures() {
@@ -51,10 +71,34 @@ class MyPictures extends Component {
           </Modal.Header>
           <Modal.Body>
             <p>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+              IMAGE
             </p>
 
             <hr />
+
+            <form onSubmit={this.handleSubmit.bind(this)}>
+              <label>
+                Title
+                <input
+                  type="text"
+                  value={this.state.modalTitle}
+                  name="modalTitle"
+                  onChange={this.handleChange.bind(this)}
+                />
+              </label>
+              <br />
+              <label>
+                Source (http link)
+                <input
+                  type="url"
+                  value={this.state.modalUrl}
+                  name="modalUrl"
+                  onChange={this.handleChange.bind(this)}
+                />
+              </label>
+              <br />
+              <Button type="submit">Add</Button>
+            </form>
 
           </Modal.Body>
           <Modal.Footer>
