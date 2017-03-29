@@ -4,9 +4,9 @@ import { Thumbnail } from 'react-bootstrap';
 import './Picture.css';
 
 export default class Picture extends Component {
-  static addDefaultSrc(event) {
+  addDefaultSrc(event) {
     const image = event.target;
-    image.src = 'http://placehold.it/300x300';
+    image.src = '/img/image_not_found.png';
   }
 
   render() {
