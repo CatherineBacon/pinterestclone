@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import ReactDOM from 'react-dom';
 import { createContainer } from 'meteor/react-meteor-data';
 import {
   Row,
@@ -9,12 +8,12 @@ import {
   Modal,
   FormGroup,
   FormControl,
-  ControlLabel
+  ControlLabel,
 } from 'react-bootstrap';
 
-import { Pictures } from '../../api/pictures.js';
+import { Pictures } from '../../api/pictures';
 
-import Picture from '../components/Picture.jsx';
+import PictureGrid from '../components/PictureGrid.jsx';
 
 class MyPictures extends Component {
   constructor(props) {
@@ -23,15 +22,17 @@ class MyPictures extends Component {
     this.state = {
       showModal: false,
       modalTitle: '',
-      modalUrl: ''
+      modalUrl: '',
     };
+
+    this.openModal = this._openModal.bind(this);
   }
 
   closeModal() {
     this.setState({ showModal: false });
   }
 
-  openModal() {
+  _openModal() {
     this.setState({ showModal: true });
   }
 
@@ -41,7 +42,7 @@ class MyPictures extends Component {
     const name = target.name;
 
     this.setState({
-      [name]: value
+      [name]: value,
     });
   }
 
@@ -52,21 +53,15 @@ class MyPictures extends Component {
       url: this.state.modalUrl,
       title: this.state.modalTitle,
       owner: 'USER',
-      ownerImage: 'USERPIC', //Update with user information
-      createdAt: new Date()
+      ownerImage: 'USERPIC', // Update with user information
+      createdAt: new Date(),
     });
 
     this.setState({
       modalTitle: '',
-      modalUrl: ''
+      modalUrl: '',
     });
     this.closeModal();
-  }
-
-  renderPictures() {
-    return this.props.pictures.map(picture => (
-      <Picture key={picture._id} picture={picture} />
-    ));
   }
 
   render() {
@@ -75,14 +70,11 @@ class MyPictures extends Component {
         <Col>
           <PageHeader>My Pictures</PageHeader>
         </Col>
-        <Button
-          bsStyle="primary"
-          bsSize="large"
-          onClick={this.openModal.bind(this)}
-        >
-          Add a picture!
-        </Button>
-
+        <Col>
+          <Button bsStyle="primary" bsSize="large" onClick={this.openModal}>
+            Add a picture!
+          </Button>
+        </Col>
         <Modal show={this.state.showModal} onHide={this.closeModal.bind(this)}>
           <Modal.Header closeButton>
             <Modal.Title>Add a picture!</Modal.Title>
@@ -124,10 +116,10 @@ class MyPictures extends Component {
           </Modal.Footer>
         </Modal>
 
-        <Col />
-
         <Col>
-          {this.renderPictures()}
+
+          <PictureGrid pictures={this.props.pictures} />
+
         </Col>
       </Row>
     );
@@ -135,14 +127,15 @@ class MyPictures extends Component {
 }
 
 MyPictures.propTypes = {
-  pictures: PropTypes.array.isRequired
+  pictures: PropTypes.array.isRequired,
 };
 
 export default createContainer(
   () => {
+    // subscribe to pictures from current user
     return {
-      pictures: Pictures.find({}).fetch()
+      pictures: Pictures.find({}).fetch(),
     };
   },
-  MyPictures
+  MyPictures,
 );
