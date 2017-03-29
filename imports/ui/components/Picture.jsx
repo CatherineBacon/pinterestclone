@@ -4,11 +4,15 @@ import { Thumbnail } from 'react-bootstrap';
 import './Picture.css';
 
 export default class Picture extends Component {
-  render() {
-    // return <img src="http://placehold.it/300x300" />;
+  static addDefaultSrc(event) {
+    const image = event.target;
+    image.src = 'http://placehold.it/300x300';
+  }
 
+  render() {
     return (
       <Thumbnail
+        onError={this.addDefaultSrc}
         src={this.props.picture.url}
         className="img-responsive picture"
       >
