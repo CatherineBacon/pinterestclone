@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
+import { ReactiveVar } from 'meteor/reactive-var';
 import {
   Row,
   Col,
@@ -64,6 +65,11 @@ class MyPictures extends Component {
     this.closeModal();
   }
 
+  loadMore(event) {
+    event.preventDefault();
+    this.props.loadMore();
+  }
+
   render() {
     return (
       <Row>
@@ -120,6 +126,13 @@ class MyPictures extends Component {
 
           <PictureGrid pictures={this.props.pictures} />
 
+          <Button
+            onClick={this.loadMore.bind(this)}
+            disabled={!this.props.canLoadMore}
+          >
+            Load more
+          </Button>
+
         </Col>
       </Row>
     );
@@ -128,13 +141,21 @@ class MyPictures extends Component {
 
 MyPictures.propTypes = {
   pictures: PropTypes.array.isRequired,
+  loadMore: PropTypes.func.isRequired,
+  canLoadMore: PropTypes.bool.isRequired,
 };
+
+const limit = new ReactiveVar(2);
 
 export default createContainer(
   () => {
     // subscribe to pictures from current user
+    const canLoadMore = limit.get() < Pictures.find({}).count();
+
     return {
-      pictures: Pictures.find({}).fetch(),
+      pictures: Pictures.find({}, { limit: limit.get() }).fetch(),
+      loadMore: () => limit.set(limit.get() + 1),
+      canLoadMore,
     };
   },
   MyPictures,
