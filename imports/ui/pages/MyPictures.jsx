@@ -1,6 +1,16 @@
 import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import { createContainer } from 'meteor/react-meteor-data';
-import { Row, Col, PageHeader, Button, Modal } from 'react-bootstrap';
+import {
+  Row,
+  Col,
+  PageHeader,
+  Button,
+  Modal,
+  FormGroup,
+  FormControl,
+  ControlLabel
+} from 'react-bootstrap';
 
 import { Pictures } from '../../api/pictures.js';
 
@@ -37,7 +47,15 @@ class MyPictures extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    console.log(this.state.modalTitle, this.state.modalUrl);
+
+    Pictures.insert({
+      url: this.state.modalUrl,
+      title: this.state.modalTitle,
+      owner: 'USER',
+      ownerImage: 'USERPIC', //Update with user information
+      createdAt: new Date()
+    });
+
     this.setState({
       modalTitle: '',
       modalUrl: ''
@@ -77,27 +95,27 @@ class MyPictures extends Component {
             <hr />
 
             <form onSubmit={this.handleSubmit.bind(this)}>
-              <label>
-                Title
-                <input
+              <FormGroup>
+                <ControlLabel>Title</ControlLabel>
+                <FormControl
                   type="text"
                   value={this.state.modalTitle}
                   name="modalTitle"
                   onChange={this.handleChange.bind(this)}
                 />
-              </label>
-              <br />
-              <label>
-                Source (http link)
-                <input
+
+                <br />
+                <ControlLabel>Source (http link)</ControlLabel>
+                <FormControl
                   type="url"
                   value={this.state.modalUrl}
                   name="modalUrl"
                   onChange={this.handleChange.bind(this)}
                 />
-              </label>
-              <br />
-              <Button type="submit">Add</Button>
+
+                <br />
+                <Button type="submit">Add</Button>
+              </FormGroup>
             </form>
 
           </Modal.Body>

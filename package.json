@@ -11,6 +11,7 @@
     "react-addons-pure-render-mixin": "^15.4.2",
     "react-bootstrap": "^0.30.8",
     "react-dom": "^15.4.2",
+    "react-masonry-infinite": "^1.1.0",
     "react-router": "^4.0.0",
     "react-router-dom": "^4.0.0"
   }
