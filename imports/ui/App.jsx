@@ -6,6 +6,7 @@ import { Grid, Row, Col, PageHeader } from 'react-bootstrap';
 import { Pictures } from '../api/pictures.js';
 
 import Home from './pages/Home.jsx';
+import MyPictures from './pages/MyPictures.jsx';
 import Picture from './components/Picture.jsx';
 
 class App extends Component {
@@ -14,6 +15,7 @@ class App extends Component {
       <Router>
         <Grid className="container">
           <Route exact path="/" component={Home} />
+          <Route path="/user/:userId" component={MyPictures} />
         </Grid>
       </Router>
     );
