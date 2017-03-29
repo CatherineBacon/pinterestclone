@@ -1,40 +1,34 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { createContainer } from 'meteor/react-meteor-data';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { Grid, Row, Col, PageHeader } from 'react-bootstrap';
 
-import Picture from './Picture.jsx';
+import { Pictures } from '../api/pictures.js';
 
-export default class App extends Component {
-  getPictures() {
-    return [
-      { _id: 1, url: 'http://placehold.it/350x150' },
-      { _id: 2, url: 'http://placehold.it/140x100' },
-      { _id: 3, url: 'http://placehold.it/200x150' }
-    ];
-  }
+import Home from './pages/Home.jsx';
+import Picture from './components/Picture.jsx';
 
-  renderPictures() {
-    return this.getPictures().map(picture => (
-      <Picture key={picture._id} picture={picture} />
-    ));
-  }
-
+class App extends Component {
   render() {
     return (
-      <Grid className="container">
-        <Row>
-          <Col>
-            <PageHeader>Pictures</PageHeader>
-          </Col>
-        </Row>
-
-        <Row>
-          <Col>
-
-            {this.renderPictures()}
-
-          </Col>
-        </Row>
-      </Grid>
+      <Router>
+        <Grid className="container">
+          <Route exact path="/" component={Home} />
+        </Grid>
+      </Router>
     );
   }
 }
+
+App.propTypes = {
+  pictures: PropTypes.array.isRequired
+};
+
+export default createContainer(
+  () => {
+    return {
+      pictures: Pictures.find({}).fetch()
+    };
+  },
+  App
+);
