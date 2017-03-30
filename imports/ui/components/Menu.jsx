@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Navbar, NavItem, Nav, Col } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 
 import AccountsUIWrapper from './AccountsUIWrapper.jsx';
 
 class Menu extends Component {
   render() {
-    const myUrl = `/user/${this.props.userId}`;
+    const myPictures = `/user/${this.props.userId}`;
 
     return (
       <Col>
@@ -19,10 +18,10 @@ class Menu extends Component {
             </Navbar.Brand>
           </Navbar.Header>
           <Nav>
-            <NavItem eventKey={1}><Link to="/">Home</Link></NavItem>
+            <NavItem eventKey={1} href="/">Home</NavItem>
             {this.props.user &&
-              <NavItem eventKey={2}>
-                <Link to={myUrl}>My Pictures</Link>
+              <NavItem eventKey={2} href={myPictures}>
+                My Pictures
               </NavItem>}
           </Nav>
           <Nav pullRight>
