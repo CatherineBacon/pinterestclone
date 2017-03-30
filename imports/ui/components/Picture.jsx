@@ -82,7 +82,7 @@ class Picture extends Component {
                 <Glyphicon glyph="trash" />
               </Button>}
             <Button
-              bsStyle="primary"
+              bsStyle="info"
               onClick={this.likePicture}
               disabled={disableLikes}
             >
