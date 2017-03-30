@@ -1,16 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
-import { Row, Col, PageHeader } from 'react-bootstrap';
+import { ReactiveVar } from 'meteor/reactive-var';
+import { Row, Col, PageHeader, Button } from 'react-bootstrap';
 
 import { Pictures } from '../../api/pictures';
 
-import Picture from '../components/Picture.jsx';
+import PictureGrid from '../components/PictureGrid.jsx';
 
 class Home extends Component {
-  renderPictures() {
-    return this.props.pictures.map(picture => (
-      <Picture key={picture._id} picture={picture} />
-    ));
+  loadMore(event) {
+    event.preventDefault();
+    this.props.loadMore();
   }
 
   render() {
@@ -21,7 +21,14 @@ class Home extends Component {
         </Col>
 
         <Col>
-          {this.renderPictures()}
+          <PictureGrid pictures={this.props.pictures} />
+
+          <Button
+            onClick={this.loadMore.bind(this)}
+            disabled={!this.props.canLoadMore}
+          >
+            Load more
+          </Button>
         </Col>
       </Row>
     );
@@ -34,13 +41,21 @@ Home.propTypes = {
       _id: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  loadMore: PropTypes.func.isRequired,
+  canLoadMore: PropTypes.bool.isRequired,
 };
 
+const limit = new ReactiveVar(10);
+
 export default createContainer(
+  // add Meteor subscibe all pictures latest x, then infinite scroll
   () => {
-    // add Meteor subscibe all pictures (latest x, then infinite scroll)
+    const canLoadMore = limit.get() < Pictures.find({}).count();
+
     return {
-      pictures: Pictures.find({}).fetch(),
+      pictures: Pictures.find({}, { limit: limit.get() }).fetch(),
+      loadMore: () => limit.set(limit.get() + 1),
+      canLoadMore,
     };
   },
   Home,

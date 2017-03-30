@@ -145,7 +145,7 @@ MyPictures.propTypes = {
   canLoadMore: PropTypes.bool.isRequired,
 };
 
-const limit = new ReactiveVar(2);
+const limit = new ReactiveVar(10);
 
 export default createContainer(
   () => {
