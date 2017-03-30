@@ -13,7 +13,7 @@ export default class App extends Component {
       <Router>
         <Grid className="container">
           <Row>
-            <Menu />
+            <Route render={({ history }) => <Menu history={history} />} />
           </Row>
           <Route exact path="/" component={Home} />
           <Route path="/about" component={About} />

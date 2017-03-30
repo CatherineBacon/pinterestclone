@@ -155,18 +155,24 @@ MyPictures.propTypes = {
 };
 
 const limit = new ReactiveVar(10);
+const pictureCount = new ReactiveVar(0);
 
 export default createContainer(
-  () => {
-    Meteor.subscribe('pictures');
-    // subscribe to pictures from current user
-    const canLoadMore = limit.get() < Pictures.find({}).count();
+  props => {
+    // Subscribe to pictures for viewed user
+    const owner = props.match.params.userId;
+    Meteor.subscribe('picturesByOwner', owner, limit.get());
+
+    // Get number of pictures with owner=owner in database
+    Meteor.call('pictures.countByOwner', owner, (error, count) => {
+      if (error) return console.log(error);
+      pictureCount.set(count);
+    });
+
+    const canLoadMore = limit.get() < pictureCount.get();
 
     return {
-      pictures: Pictures.find(
-        {},
-        { limit: limit.get(), sort: { createdAt: -1 } },
-      ).fetch(),
+      pictures: Pictures.find({ owner }, { sort: { createdAt: -1 } }).fetch(),
       loadMore: () => limit.set(limit.get() + 1),
       canLoadMore,
       user: Meteor.user(),

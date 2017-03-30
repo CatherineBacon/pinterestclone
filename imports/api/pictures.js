@@ -5,24 +5,41 @@ import { check } from 'meteor/check';
 export const Pictures = new Mongo.Collection('pictures');
 
 if (Meteor.isServer) {
-  Meteor.publish('pictures', function picturesPublication() {
-    return Pictures.find();
+  Meteor.publish('pictures', limit => {
+    return Pictures.find({}, { sort: { createdAt: -1 }, limit });
+  });
+
+  Meteor.publish('picturesByOwner', (owner, limit) => {
+    check(owner, String);
+    check(limit, Number);
+
+    return Pictures.find({ owner }, { sort: { createdAt: -1 }, limit });
   });
 }
 
 Meteor.methods({
+  'pictures.countAll'() {
+    return Pictures.find().count();
+  },
+
+  'pictures.countByOwner'(owner) {
+    check(owner, String);
+
+    return Pictures.find({ owner }).count();
+  },
+
   'pictures.insert'(url, title) {
     check(url, String);
     check(title, String);
 
-    if (!Meteor.userId()) {
+    if (!this.userId) {
       throw new Meteor.Error('not-authorised');
     }
 
     Pictures.insert({
       url,
       title,
-      owner: Meteor.userId(),
+      owner: this.userId,
       ownerImage: 'USERPIC', // Update with user information
       createdAt: new Date(),
       likes: 0,

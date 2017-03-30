@@ -6,6 +6,12 @@ import { Navbar, NavItem, Nav, Col } from 'react-bootstrap';
 import AccountsUIWrapper from './AccountsUIWrapper.jsx';
 
 class Menu extends Component {
+  handleSelect(eventKey, event) {
+    event.preventDefault();
+
+    this.props.history.push(eventKey);
+  }
+
   render() {
     const myPictures = `/user/${this.props.userId}`;
 
@@ -17,11 +23,11 @@ class Menu extends Component {
               Picture Board
             </Navbar.Brand>
           </Navbar.Header>
-          <Nav>
-            <NavItem eventKey={1} href="/">Home</NavItem>
-            <NavItem eventKey={2} href="/about">About</NavItem>
+          <Nav onSelect={this.handleSelect.bind(this)}>
+            <NavItem eventKey="/" href="#">Home</NavItem>
+            <NavItem eventKey="/about" href="#">About</NavItem>
             {this.props.user &&
-              <NavItem eventKey={3} href={myPictures}>
+              <NavItem eventKey={myPictures} href="#">
                 My Pictures
               </NavItem>}
           </Nav>

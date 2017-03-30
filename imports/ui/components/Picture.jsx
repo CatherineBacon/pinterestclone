@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
+import { Link } from 'react-router-dom';
 import { Thumbnail, Glyphicon, Button } from 'react-bootstrap';
 
 import './Picture.css';
@@ -56,7 +57,7 @@ export default class Picture extends Component {
             </span>}
         </h4>
         <p>
-          <a href={`/user/${this.props.picture.owner}`}>OWNER</a>
+          <Link to={`/user/${this.props.picture.owner}`}>OWNER</Link>
           {' '}
           <span className="pull-right">
             <Button
