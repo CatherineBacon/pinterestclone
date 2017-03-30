@@ -9,6 +9,8 @@ import {
   Button,
   Image,
   ButtonGroup,
+  OverlayTrigger,
+  Tooltip,
 } from 'react-bootstrap';
 
 import './Picture.css';
@@ -64,24 +66,30 @@ class Picture extends Component {
         </h4>
         <p>
           <Link to={`/user/${picture.owner}`}>
-            <Image src={ownerImage} circle className="avatar pull-left" />
+            <OverlayTrigger
+              placement="right"
+              overlay={<Tooltip>{ownerName}</Tooltip>}
+            >
+
+              <Image src={ownerImage} circle className="avatar pull-left" />
+
+            </OverlayTrigger>
           </Link>
-          {' '}
-          <span className="pull-right">
-            <ButtonGroup className="pull-right">
-              {showDelete &&
-                <Button bsStyle="danger" onClick={this.deletePicture}>
-                  <Glyphicon glyph="trash" />
-                </Button>}
-              <Button
-                bsStyle="primary"
-                onClick={this.likePicture}
-                disabled={disableLikes}
-              >
-                <Glyphicon glyph="heart" />{' '}{picture.likes}
-              </Button>
-            </ButtonGroup>
-          </span>
+
+          <ButtonGroup className="pull-right">
+            {showDelete &&
+              <Button bsStyle="danger" onClick={this.deletePicture}>
+                <Glyphicon glyph="trash" />
+              </Button>}
+            <Button
+              bsStyle="primary"
+              onClick={this.likePicture}
+              disabled={disableLikes}
+            >
+              <Glyphicon glyph="heart" />{' '}{picture.likes}
+            </Button>
+          </ButtonGroup>
+
         </p>
       </Thumbnail>
     );
