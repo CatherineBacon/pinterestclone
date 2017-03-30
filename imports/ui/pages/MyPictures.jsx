@@ -3,6 +3,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { Meteor } from 'meteor/meteor';
 import { _ } from 'lodash';
+import VisibilitySensor from 'react-visibility-sensor';
 import {
   Row,
   Col,
@@ -61,15 +62,14 @@ class MyPictures extends Component {
     this.closeModal();
   }
 
-  loadMore(event) {
-    event.preventDefault();
-    this.props.loadMore();
+  loadMore(isVisible) {
+    if (isVisible) this.props.loadMore();
   }
 
   render() {
     const urlUser = this.props.match.params.userId;
     const ownPage = urlUser === this.props.userId;
-    const { owner } = this.props;
+    const { owner, canLoadMore } = this.props;
 
     const ownerName = _.get(owner, 'services.google.given_name', 'This user');
 
@@ -134,14 +134,13 @@ class MyPictures extends Component {
 
           <PictureGrid pictures={this.props.pictures} />
 
-          <Button
-            onClick={this.loadMore.bind(this)}
-            disabled={!this.props.canLoadMore}
-          >
-            Load more
-          </Button>
-
+          <VisibilitySensor
+            onChange={this.loadMore.bind(this)}
+            offset={{ direction: 'bottom', value: -300 }}
+            active={canLoadMore}
+          />
         </Col>
+
       </Row>
     );
   }
@@ -183,7 +182,7 @@ export default createContainer(
         { owner: ownerId },
         { sort: { createdAt: -1 } },
       ).fetch(),
-      loadMore: () => limit.set(limit.get() + 1),
+      loadMore: () => limit.set(limit.get() + 5),
       canLoadMore,
       user: Meteor.user(),
       userId: Meteor.userId(),

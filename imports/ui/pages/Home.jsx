@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { ReactiveVar } from 'meteor/reactive-var';
+import VisibilitySensor from 'react-visibility-sensor';
 import { Row, Col, PageHeader, Button } from 'react-bootstrap';
 
 import { Pictures } from '../../api/pictures';
@@ -9,9 +10,8 @@ import { Pictures } from '../../api/pictures';
 import PictureGrid from '../components/PictureGrid.jsx';
 
 class Home extends Component {
-  loadMore(event) {
-    event.preventDefault();
-    this.props.loadMore();
+  loadMore(isVisible) {
+    if (isVisible) this.props.loadMore();
   }
 
   render() {
@@ -24,13 +24,13 @@ class Home extends Component {
         <Col>
           <PictureGrid pictures={this.props.pictures} />
 
-          <Button
-            onClick={this.loadMore.bind(this)}
-            disabled={!this.props.canLoadMore}
-          >
-            Load more
-          </Button>
+          <VisibilitySensor
+            onChange={this.loadMore.bind(this)}
+            offset={{ direction: 'bottom', value: -300 }}
+            active={this.props.canLoadMore}
+          />
         </Col>
+
       </Row>
     );
   }
@@ -62,7 +62,7 @@ export default createContainer(
 
     return {
       pictures: Pictures.find({}, { sort: { createdAt: -1 } }).fetch(),
-      loadMore: () => limit.set(limit.get() + 1),
+      loadMore: () => limit.set(limit.get() + 5),
       canLoadMore,
       userId: Meteor.userId(),
     };

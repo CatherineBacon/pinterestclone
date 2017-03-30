@@ -64,11 +64,11 @@ class Picture extends Component {
         <h4>
           {picture.title || 'test'}
         </h4>
-        <p>
+        <div>
           <Link to={`/user/${picture.owner}`}>
             <OverlayTrigger
               placement="right"
-              overlay={<Tooltip>{ownerName}</Tooltip>}
+              overlay={<Tooltip id="tooltip">{ownerName}</Tooltip>}
             >
 
               <Image src={ownerImage} circle className="avatar pull-left" />
@@ -90,7 +90,7 @@ class Picture extends Component {
             </Button>
           </ButtonGroup>
 
-        </p>
+        </div>
       </Thumbnail>
     );
   }

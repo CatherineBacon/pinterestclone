@@ -17,7 +17,6 @@ class AccountsUIWrapper extends Component {
   }
   render() {
     const { userId, user } = this.props;
-    console.log(userId, user);
     return <span ref="container" />;
   }
 }
