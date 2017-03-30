@@ -53,7 +53,10 @@ export default createContainer(
     const canLoadMore = limit.get() < Pictures.find({}).count();
 
     return {
-      pictures: Pictures.find({}, { limit: limit.get() }).fetch(),
+      pictures: Pictures.find(
+        {},
+        { limit: limit.get(), sort: { createdAt: -1 } },
+      ).fetch(),
       loadMore: () => limit.set(limit.get() + 1),
       canLoadMore,
     };
