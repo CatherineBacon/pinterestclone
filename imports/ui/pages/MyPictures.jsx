@@ -51,14 +51,7 @@ class MyPictures extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    Pictures.insert({
-      url: this.state.modalUrl,
-      title: this.state.modalTitle,
-      owner: Meteor.userId(),
-      ownerImage: 'USERPIC', // Update with user information
-      createdAt: new Date(),
-      likes: 0,
-    });
+    Meteor.call('pictures.insert', this.state.modalUrl, this.state.modalTitle);
 
     this.setState({
       modalTitle: '',

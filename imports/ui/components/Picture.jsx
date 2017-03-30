@@ -12,19 +12,22 @@ export default class Picture extends Component {
   }
 
   deletePicture() {
-    // only owner should be able to delete image
-    Pictures.remove(this.props.picture._id);
+    Meteor.call(
+      'pictures.remove',
+      this.props.picture._id,
+      this.props.picture.owner,
+    );
   }
 
   likePicture() {
     // only non-owner shoud be able to like picture
     // only like once
-    Pictures.update(this.props.picture._id, {
-      $inc: { likes: 1 },
-    });
+    Meteor.call('pictures.like', this.props.picture);
   }
 
   render() {
+    const showDelete = Meteor.userId() == this.props.picture.owner;
+
     return (
       <Thumbnail
         onError={this.addDefaultSrc}
@@ -34,15 +37,16 @@ export default class Picture extends Component {
         <h4>
           {this.props.picture.title || 'test'}
           {' '}
-          <span className="pull-right">
-            <Button
-              bsStyle="danger"
-              bsSize="xsmall"
-              onClick={this.deletePicture.bind(this)}
-            >
-              <Glyphicon glyph="trash" />
-            </Button>
-          </span>
+          {showDelete &&
+            <span className="pull-right">
+              <Button
+                bsStyle="danger"
+                bsSize="xsmall"
+                onClick={this.deletePicture.bind(this)}
+              >
+                <Glyphicon glyph="trash" />
+              </Button>
+            </span>}
         </h4>
         <p>
           OWNER
