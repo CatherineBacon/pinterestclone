@@ -73,15 +73,18 @@ class MyPictures extends Component {
       <Row>
         <Col>
           {ownPage
-            ? <PageHeader>My Pictures</PageHeader>
+            ? <PageHeader>
+                My Pictures <Button
+                  className="pull-right"
+                  bsStyle="primary"
+                  bsSize="large"
+                  onClick={this.openModal}
+                >
+                  Add a picture!
+                </Button>
+              </PageHeader>
             : <PageHeader>USERNAME's Pictures</PageHeader>}
         </Col>
-        {ownPage &&
-          <Col>
-            <Button bsStyle="primary" bsSize="large" onClick={this.openModal}>
-              Add a picture!
-            </Button>
-          </Col>}
         <Modal show={this.state.showModal} onHide={this.closeModal.bind(this)}>
           <Modal.Header closeButton>
             <Modal.Title>Add a picture!</Modal.Title>
