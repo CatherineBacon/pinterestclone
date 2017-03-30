@@ -61,6 +61,7 @@ export default createContainer(
       ).fetch(),
       loadMore: () => limit.set(limit.get() + 1),
       canLoadMore,
+      userId: Meteor.userId(),
     };
   },
   Home,
