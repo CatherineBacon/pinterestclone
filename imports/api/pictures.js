@@ -14,8 +14,8 @@ Meteor.methods({
     }
 
     Pictures.insert({
-      url: url,
-      title: title,
+      url,
+      title,
       owner: Meteor.userId(),
       ownerImage: 'USERPIC', // Update with user information
       createdAt: new Date(),
