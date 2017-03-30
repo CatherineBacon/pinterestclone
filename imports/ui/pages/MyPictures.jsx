@@ -148,6 +148,7 @@ MyPictures.propTypes = {
   ).isRequired,
   loadMore: PropTypes.func.isRequired,
   canLoadMore: PropTypes.bool.isRequired,
+  match: PropTypes.object.isRequired,
 };
 
 const limit = new ReactiveVar(10);

@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { Row, Col, PageHeader, Button } from 'react-bootstrap';
@@ -48,10 +49,9 @@ Home.propTypes = {
 const limit = new ReactiveVar(10);
 
 export default createContainer(
-  // add Meteor subscibe all pictures latest x, then infinite scroll
   () => {
     Meteor.subscribe('pictures');
-
+    // add Meteor subscibe all pictures latest x, then infinite scroll
     const canLoadMore = limit.get() < Pictures.find({}).count();
 
     return {

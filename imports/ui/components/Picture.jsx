@@ -1,17 +1,23 @@
 import React, { Component, PropTypes } from 'react';
+import { Meteor } from 'meteor/meteor';
 import { Thumbnail, Glyphicon, Button } from 'react-bootstrap';
 
 import './Picture.css';
 
-import { Pictures } from '../../api/pictures.js';
-
 export default class Picture extends Component {
+  constructor(props) {
+    super(props);
+
+    this.deletePicture = this._deletePicture.bind(this);
+    this.likePicture = this._likePicture.bind(this);
+  }
+
   addDefaultSrc(event) {
     const image = event.target;
     image.src = '/img/image_not_found.png';
   }
 
-  deletePicture() {
+  _deletePicture() {
     Meteor.call(
       'pictures.remove',
       this.props.picture._id,
@@ -19,14 +25,14 @@ export default class Picture extends Component {
     );
   }
 
-  likePicture() {
+  _likePicture() {
     Meteor.call('pictures.like', this.props.picture);
   }
 
   render() {
-    const showDelete = Meteor.userId() == this.props.picture.owner;
-    const disableLikes = Meteor.userId() == this.props.picture.owner ||
-      this.props.picture.likedBy.indexOf(Meteor.userId()) != -1 ||
+    const showDelete = Meteor.userId() === this.props.picture.owner;
+    const disableLikes = Meteor.userId() === this.props.picture.owner ||
+      this.props.picture.likedBy.indexOf(Meteor.userId()) !== -1 ||
       !Meteor.userId();
 
     return (
@@ -43,7 +49,7 @@ export default class Picture extends Component {
               <Button
                 bsStyle="danger"
                 bsSize="xsmall"
-                onClick={this.deletePicture.bind(this)}
+                onClick={this.deletePicture}
               >
                 <Glyphicon glyph="trash" />
               </Button>
@@ -55,7 +61,7 @@ export default class Picture extends Component {
           <span className="pull-right">
             <Button
               bsStyle="link"
-              onClick={this.likePicture.bind(this)}
+              onClick={this.likePicture}
               disabled={disableLikes}
             >
               <Glyphicon glyph="heart" />{' '}{this.props.picture.likes}
