@@ -17,7 +17,7 @@ class Home extends Component {
     return (
       <Row>
         <Col>
-          <PageHeader>Pictures</PageHeader>
+          <PageHeader>All Pictures</PageHeader>
         </Col>
 
         <Col>
@@ -50,6 +50,8 @@ const limit = new ReactiveVar(10);
 export default createContainer(
   // add Meteor subscibe all pictures latest x, then infinite scroll
   () => {
+    Meteor.subscribe('pictures');
+
     const canLoadMore = limit.get() < Pictures.find({}).count();
 
     return {

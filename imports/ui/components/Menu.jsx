@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
+import { Meteor } from 'meteor/meteor';
+import { createContainer } from 'meteor/react-meteor-data';
 import { Navbar, NavItem, Nav, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import AccountsUIWrapper from './AccountsUIWrapper.jsx';
 
-export default class Menu extends Component {
+class Menu extends Component {
   render() {
-    const myUrl = `/user/${this.props.user}`;
+    const myUrl = `/user/${this.props.userId}`;
 
     return (
       <Col>
@@ -18,7 +20,10 @@ export default class Menu extends Component {
           </Navbar.Header>
           <Nav>
             <NavItem eventKey={1}><Link to="/">Home</Link></NavItem>
-            <NavItem eventKey={2}><Link to={myUrl}>My Pictures</Link></NavItem>
+            {this.props.user &&
+              <NavItem eventKey={2}>
+                <Link to={myUrl}>My Pictures</Link>
+              </NavItem>}
           </Nav>
           <Nav pullRight>
             <NavItem>
@@ -30,3 +35,13 @@ export default class Menu extends Component {
     );
   }
 }
+
+export default createContainer(
+  () => {
+    return {
+      userId: Meteor.userId(),
+      user: Meteor.user(),
+    };
+  },
+  Menu,
+);

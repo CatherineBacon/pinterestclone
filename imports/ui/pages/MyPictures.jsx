@@ -66,16 +66,22 @@ class MyPictures extends Component {
   }
 
   render() {
+    const urlUser = this.props.match.params.userId;
+    const ownPage = urlUser === this.props.userId;
+
     return (
       <Row>
         <Col>
-          <PageHeader>My Pictures</PageHeader>
+          {ownPage
+            ? <PageHeader>My Pictures</PageHeader>
+            : <PageHeader>USERNAME's Pictures</PageHeader>}
         </Col>
-        <Col>
-          <Button bsStyle="primary" bsSize="large" onClick={this.openModal}>
-            Add a picture!
-          </Button>
-        </Col>
+        {ownPage &&
+          <Col>
+            <Button bsStyle="primary" bsSize="large" onClick={this.openModal}>
+              Add a picture!
+            </Button>
+          </Col>}
         <Modal show={this.state.showModal} onHide={this.closeModal.bind(this)}>
           <Modal.Header closeButton>
             <Modal.Title>Add a picture!</Modal.Title>
@@ -135,7 +141,11 @@ class MyPictures extends Component {
 }
 
 MyPictures.propTypes = {
-  pictures: PropTypes.array.isRequired,
+  pictures: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
   loadMore: PropTypes.func.isRequired,
   canLoadMore: PropTypes.bool.isRequired,
 };
@@ -144,6 +154,7 @@ const limit = new ReactiveVar(10);
 
 export default createContainer(
   () => {
+    Meteor.subscribe('pictures');
     // subscribe to pictures from current user
     const canLoadMore = limit.get() < Pictures.find({}).count();
 
@@ -154,6 +165,8 @@ export default createContainer(
       ).fetch(),
       loadMore: () => limit.set(limit.get() + 1),
       canLoadMore,
+      user: Meteor.user(),
+      userId: Meteor.userId(),
     };
   },
   MyPictures,

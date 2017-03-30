@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { Meteor } from 'meteor/meteor';
 import { Grid, Row } from 'react-bootstrap';
 
 import Home from './pages/Home.jsx';
@@ -13,7 +12,7 @@ export default class App extends Component {
       <Router>
         <Grid className="container">
           <Row>
-            <Menu user={Meteor.userId()} />
+            <Menu />
           </Row>
           <Route exact path="/" component={Home} />
           <Route path="/user/:userId" component={MyPictures} />

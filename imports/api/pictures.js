@@ -4,6 +4,12 @@ import { check } from 'meteor/check';
 
 export const Pictures = new Mongo.Collection('pictures');
 
+if (Meteor.isServer) {
+  Meteor.publish('pictures', function picturesPublication() {
+    return Pictures.find();
+  });
+}
+
 Meteor.methods({
   'pictures.insert'(url, title) {
     check(url, String);
