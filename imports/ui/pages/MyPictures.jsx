@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 import { ReactiveVar } from 'meteor/reactive-var';
+import { Meteor } from 'meteor/meteor';
 import {
   Row,
   Col,
@@ -53,9 +54,10 @@ class MyPictures extends Component {
     Pictures.insert({
       url: this.state.modalUrl,
       title: this.state.modalTitle,
-      owner: 'USER',
+      owner: Meteor.userId(),
       ownerImage: 'USERPIC', // Update with user information
       createdAt: new Date(),
+      likes: 0,
     });
 
     this.setState({
