@@ -1,11 +1,19 @@
 import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Link } from 'react-router-dom';
-import { Thumbnail, Glyphicon, Button } from 'react-bootstrap';
+import { createContainer } from 'meteor/react-meteor-data';
+import { _ } from 'lodash';
+import {
+  Thumbnail,
+  Glyphicon,
+  Button,
+  Image,
+  ButtonGroup,
+} from 'react-bootstrap';
 
 import './Picture.css';
 
-export default class Picture extends Component {
+class Picture extends Component {
   constructor(props) {
     super(props);
 
@@ -31,42 +39,48 @@ export default class Picture extends Component {
   }
 
   render() {
-    const showDelete = Meteor.userId() === this.props.picture.owner;
-    const disableLikes = Meteor.userId() === this.props.picture.owner ||
-      this.props.picture.likedBy.indexOf(Meteor.userId()) !== -1 ||
+    const { owner, picture } = this.props;
+
+    const showDelete = Meteor.userId() === picture.owner;
+    const disableLikes = Meteor.userId() === picture.owner ||
+      picture.likedBy.indexOf(Meteor.userId()) !== -1 ||
       !Meteor.userId();
+
+    const ownerName = _.get(owner, 'services.google.given_name', '');
+    const ownerImage = _.get(
+      owner,
+      'services.google.picture',
+      'http://placehold.it/100x100',
+    );
 
     return (
       <Thumbnail
         onError={this.addDefaultSrc}
-        src={this.props.picture.url}
+        src={picture.url}
         className="img-responsive picture"
       >
         <h4>
-          {this.props.picture.title || 'test'}
-          {' '}
-          {showDelete &&
-            <span className="pull-right">
-              <Button
-                bsStyle="danger"
-                bsSize="xsmall"
-                onClick={this.deletePicture}
-              >
-                <Glyphicon glyph="trash" />
-              </Button>
-            </span>}
+          {picture.title || 'test'}
         </h4>
         <p>
-          <Link to={`/user/${this.props.picture.owner}`}>OWNER</Link>
+          <Link to={`/user/${picture.owner}`}>
+            <Image src={ownerImage} circle className="avatar pull-left" />
+          </Link>
           {' '}
           <span className="pull-right">
-            <Button
-              bsStyle="link"
-              onClick={this.likePicture}
-              disabled={disableLikes}
-            >
-              <Glyphicon glyph="heart" />{' '}{this.props.picture.likes}
-            </Button>
+            <ButtonGroup className="pull-right">
+              {showDelete &&
+                <Button bsStyle="danger" onClick={this.deletePicture}>
+                  <Glyphicon glyph="trash" />
+                </Button>}
+              <Button
+                bsStyle="primary"
+                onClick={this.likePicture}
+                disabled={disableLikes}
+              >
+                <Glyphicon glyph="heart" />{' '}{picture.likes}
+              </Button>
+            </ButtonGroup>
           </span>
         </p>
       </Thumbnail>
@@ -77,3 +91,15 @@ export default class Picture extends Component {
 Picture.propTypes = {
   picture: PropTypes.object.isRequired,
 };
+
+export default createContainer(
+  props => {
+    Meteor.subscribe('userFromId', props.picture.owner);
+
+    return {
+      picture: props.picture,
+      owner: Meteor.users.findOne(props.picture.owner),
+    };
+  },
+  Picture,
+);

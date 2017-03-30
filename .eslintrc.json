@@ -17,6 +17,7 @@
     "import/resolver": "meteor"
   },
   "rules": {
-    "no-underscore-dangle": "warn"
+    "no-underscore-dangle": "warn",
+    "arrow-parens": "warn"
   }
 }

@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { Meteor } from 'meteor/meteor';
+import { _ } from 'lodash';
 import {
   Row,
   Col,
@@ -68,6 +69,9 @@ class MyPictures extends Component {
   render() {
     const urlUser = this.props.match.params.userId;
     const ownPage = urlUser === this.props.userId;
+    const { owner } = this.props;
+
+    const ownerName = _.get(owner, 'services.google.given_name', 'This user');
 
     return (
       <Row>
@@ -83,7 +87,7 @@ class MyPictures extends Component {
                   Add a picture!
                 </Button>
               </PageHeader>
-            : <PageHeader>USERNAME's Pictures</PageHeader>}
+            : <PageHeader>{ownerName}'s Pictures</PageHeader>}
         </Col>
         <Modal show={this.state.showModal} onHide={this.closeModal.bind(this)}>
           <Modal.Header closeButton>
@@ -160,11 +164,14 @@ const pictureCount = new ReactiveVar(0);
 export default createContainer(
   props => {
     // Subscribe to pictures for viewed user
-    const owner = props.match.params.userId;
-    Meteor.subscribe('picturesByOwner', owner, limit.get());
+    const ownerId = props.match.params.userId;
+    Meteor.subscribe('picturesByOwner', ownerId, limit.get());
+
+    // Subsribe to user in url
+    Meteor.subscribe('userFromId', ownerId);
 
     // Get number of pictures with owner=owner in database
-    Meteor.call('pictures.countByOwner', owner, (error, count) => {
+    Meteor.call('pictures.countByOwner', ownerId, (error, count) => {
       if (error) return console.log(error);
       pictureCount.set(count);
     });
@@ -172,11 +179,15 @@ export default createContainer(
     const canLoadMore = limit.get() < pictureCount.get();
 
     return {
-      pictures: Pictures.find({ owner }, { sort: { createdAt: -1 } }).fetch(),
+      pictures: Pictures.find(
+        { owner: ownerId },
+        { sort: { createdAt: -1 } },
+      ).fetch(),
       loadMore: () => limit.set(limit.get() + 1),
       canLoadMore,
       user: Meteor.user(),
       userId: Meteor.userId(),
+      owner: Meteor.users.findOne(ownerId),
     };
   },
   MyPictures,
