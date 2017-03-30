@@ -26,7 +26,8 @@ export default class Picture extends Component {
   render() {
     const showDelete = Meteor.userId() == this.props.picture.owner;
     const disableLikes = Meteor.userId() == this.props.picture.owner ||
-      this.props.picture.likedBy.indexOf(Meteor.userId()) != -1;
+      this.props.picture.likedBy.indexOf(Meteor.userId()) != -1 ||
+      !Meteor.userId();
 
     return (
       <Thumbnail
@@ -49,7 +50,7 @@ export default class Picture extends Component {
             </span>}
         </h4>
         <p>
-          OWNER
+          <a href={`/user/${this.props.picture.owner}`}>OWNER</a>
           {' '}
           <span className="pull-right">
             <Button
