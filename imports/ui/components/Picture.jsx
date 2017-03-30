@@ -20,13 +20,13 @@ export default class Picture extends Component {
   }
 
   likePicture() {
-    // only non-owner shoud be able to like picture
-    // only like once
     Meteor.call('pictures.like', this.props.picture);
   }
 
   render() {
     const showDelete = Meteor.userId() == this.props.picture.owner;
+    const disableLikes = Meteor.userId() == this.props.picture.owner ||
+      this.props.picture.likedBy.indexOf(Meteor.userId()) != -1;
 
     return (
       <Thumbnail
@@ -52,7 +52,11 @@ export default class Picture extends Component {
           OWNER
           {' '}
           <span className="pull-right">
-            <Button bsStyle="link" onClick={this.likePicture.bind(this)}>
+            <Button
+              bsStyle="link"
+              onClick={this.likePicture.bind(this)}
+              disabled={disableLikes}
+            >
               <Glyphicon glyph="heart" />{' '}{this.props.picture.likes}
             </Button>
           </span>

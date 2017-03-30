@@ -33,7 +33,7 @@ Meteor.methods({
     }
 
     if (Meteor.userId() !== pictureOwner) {
-      throw new Meteor.Error('not-suthorised');
+      throw new Meteor.Error('not-authorised');
     }
 
     Pictures.remove(pictureId);
@@ -46,8 +46,17 @@ Meteor.methods({
     const owner = picture.owner;
     const likedBy = picture.likedBy;
 
+    if (Meteor.userId() === owner) {
+      throw new Meteor.Error('not-authorised');
+    }
+
+    if (likedBy.indexOf(Meteor.userId()) !== -1) {
+      throw new Meteor.Error('not-authorised');
+    }
+
     Pictures.update(id, {
       $inc: { likes: 1 },
+      $push: { likedBy: Meteor.userId() },
     });
   },
 });
