@@ -19,8 +19,9 @@ class Menu extends Component {
           </Navbar.Header>
           <Nav>
             <NavItem eventKey={1} href="/">Home</NavItem>
+            <NavItem eventKey={2} href="/about">About</NavItem>
             {this.props.user &&
-              <NavItem eventKey={2} href={myPictures}>
+              <NavItem eventKey={3} href={myPictures}>
                 My Pictures
               </NavItem>}
           </Nav>
