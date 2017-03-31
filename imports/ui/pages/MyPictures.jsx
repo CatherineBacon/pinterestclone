@@ -4,20 +4,12 @@ import { ReactiveVar } from 'meteor/reactive-var';
 import { Meteor } from 'meteor/meteor';
 import { _ } from 'lodash';
 import VisibilitySensor from 'react-visibility-sensor';
-import {
-  Row,
-  Col,
-  PageHeader,
-  Button,
-  Modal,
-  FormGroup,
-  FormControl,
-  ControlLabel,
-} from 'react-bootstrap';
+import { Row, Col, PageHeader } from 'react-bootstrap';
 
 import { Pictures } from '../../api/pictures';
 
 import PictureGrid from '../components/PictureGrid.jsx';
+import AddPicture from '../components/AddPicture.jsx';
 
 class MyPictures extends Component {
   constructor(props) {
@@ -78,57 +70,11 @@ class MyPictures extends Component {
         <Col>
           {ownPage
             ? <PageHeader>
-                My Pictures <Button
-                  className="pull-right"
-                  bsStyle="primary"
-                  bsSize="large"
-                  onClick={this.openModal}
-                >
-                  Add a picture!
-                </Button>
+                My Pictures
+                <AddPicture />
               </PageHeader>
             : <PageHeader>{ownerName}'s Pictures</PageHeader>}
         </Col>
-        <Modal show={this.state.showModal} onHide={this.closeModal.bind(this)}>
-          <Modal.Header closeButton>
-            <Modal.Title>Add a picture!</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <p>
-              IMAGE
-            </p>
-
-            <hr />
-
-            <form onSubmit={this.handleSubmit.bind(this)}>
-              <FormGroup>
-                <ControlLabel>Title</ControlLabel>
-                <FormControl
-                  type="text"
-                  value={this.state.modalTitle}
-                  name="modalTitle"
-                  onChange={this.handleChange.bind(this)}
-                />
-
-                <br />
-                <ControlLabel>Source (http link)</ControlLabel>
-                <FormControl
-                  type="url"
-                  value={this.state.modalUrl}
-                  name="modalUrl"
-                  onChange={this.handleChange.bind(this)}
-                />
-
-                <br />
-                <Button type="submit">Add</Button>
-              </FormGroup>
-            </form>
-
-          </Modal.Body>
-          <Modal.Footer>
-            <Button onClick={this.closeModal.bind(this)}>Close</Button>
-          </Modal.Footer>
-        </Modal>
 
         <Col>
 
@@ -139,6 +85,7 @@ class MyPictures extends Component {
             offset={{ direction: 'bottom', value: -300 }}
             active={canLoadMore}
           />
+
         </Col>
 
       </Row>
