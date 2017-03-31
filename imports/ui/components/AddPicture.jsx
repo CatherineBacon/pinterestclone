@@ -81,30 +81,28 @@ export default class AddPicture extends Component {
               <hr />
 
               <FormGroup>
-                <ControlLabel>Title</ControlLabel>
-                <FormControl
-                  type="text"
-                  value={this.state.modalTitle}
-                  name="modalTitle"
-                  onChange={this.handleChange.bind(this)}
-                />
-
-                <br />
                 <ControlLabel>Source (http link)</ControlLabel>
                 <FormControl
                   type="url"
                   value={this.state.modalUrl}
                   name="modalUrl"
-                  onChange={this.handleChange.bind(this)}
+                  onChange={this.handleChange}
                 />
 
                 <br />
-                <Button type="submit">Add</Button>
+
+                <ControlLabel>Title</ControlLabel>
+                <FormControl
+                  type="text"
+                  value={this.state.modalTitle}
+                  name="modalTitle"
+                  onChange={this.handleChange}
+                />
               </FormGroup>
 
             </Modal.Body>
             <Modal.Footer>
-              <Button onClick={this.closeModal.bind(this)}>Close</Button>
+              <Button type="submit">Add</Button>
             </Modal.Footer>
           </form>
         </Modal>
