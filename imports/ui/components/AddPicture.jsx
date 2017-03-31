@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { Meteor } from 'meteor/meteor';
+import { _ } from 'lodash';
 import {
   Button,
   Modal,
   FormGroup,
   FormControl,
   ControlLabel,
+  Image,
 } from 'react-bootstrap';
 
 import { Pictures } from '../../api/pictures';
@@ -18,12 +20,15 @@ export default class AddPicture extends Component {
       showModal: false,
       modalTitle: '',
       modalUrl: '',
+      modalImage: '/img/insert_image_here.png',
     };
 
     this.openModal = this._openModal.bind(this);
     this.closeModal = this._closeModal.bind(this);
     this.handleChange = this._handleChange.bind(this);
     this.handleSubmit = this._handleSubmit.bind(this);
+
+    this.handleImage = _.debounce(this._handleImage, 1000);
   }
 
   _closeModal() {
@@ -42,6 +47,19 @@ export default class AddPicture extends Component {
     this.setState({
       [name]: value,
     });
+
+    this.handleImage();
+  }
+
+  _handleImage() {
+    const { modalUrl } = this.state;
+    console.log(modalUrl);
+    this.setState({ modalImage: modalUrl });
+  }
+
+  addDefaultSrc(event) {
+    const image = event.target;
+    image.src = '/img/image_not_found.png';
   }
 
   _handleSubmit(event) {
@@ -75,7 +93,11 @@ export default class AddPicture extends Component {
             </Modal.Header>
             <Modal.Body>
               <p>
-                IMAGE
+                <Image
+                  src={this.state.modalImage}
+                  className="img-responsive"
+                  onError={this.addDefaultSrc}
+                />
               </p>
 
               <hr />
