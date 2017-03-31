@@ -8,6 +8,7 @@ import { Row, Col, PageHeader, Button } from 'react-bootstrap';
 import { Pictures } from '../../api/pictures';
 
 import PictureGrid from '../components/PictureGrid.jsx';
+import AddPicture from '../components/AddPicture.jsx';
 
 class Home extends Component {
   loadMore(isVisible) {
@@ -18,7 +19,9 @@ class Home extends Component {
     return (
       <Row>
         <Col>
-          <PageHeader>All Pictures</PageHeader>
+          <PageHeader>
+            All Pictures {this.props.userId && <AddPicture />}
+          </PageHeader>
         </Col>
 
         <Col>
