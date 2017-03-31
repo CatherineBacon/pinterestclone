@@ -2,7 +2,7 @@
 
 This app was created as part of the following FreeCodeCamp challenge: https://www.freecodecamp.com/challenges/build-a-pinterest-clone
 
-**Final app: UPDATE**
+**Final app: https://catherinepictureboard.herokuapp.com/**
 
 ## Objective
 

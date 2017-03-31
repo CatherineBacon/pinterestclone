@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, PageHeader } from 'react-bootstrap';
+import { Row, Col, PageHeader, Panel } from 'react-bootstrap';
 
 export default class About extends Component {
   render() {
@@ -22,10 +22,17 @@ export default class About extends Component {
             <strong>
               Final app:
               {' '}
-              <a href="#">
-                UPDATE
+              <a href="https://catherinepictureboard.herokuapp.com/">
+                https://catherinepictureboard.herokuapp.com/
               </a>
             </strong>
+          </p>
+          <p>
+            Github repository:
+            {' '}
+            <a href="https://github.com/CatherineBacon/pinterestclone">
+              https://github.com/CatherineBacon/pinterestclone
+            </a>
           </p>
         </Col>
         <Col>
@@ -105,6 +112,17 @@ export default class About extends Component {
             {' '}
             to allow infinite scrolling.
           </p>
+        </Col>
+        <Col>
+          <Panel bsStyle="info">
+            Written and coded by
+            {' '}
+            <span>
+              <a href="https://github.com/CatherineBacon/pinterestclone">
+                Catherine Bacon
+              </a>
+            </span>
+          </Panel>
         </Col>
       </Row>
     );
