@@ -70,6 +70,7 @@ export default class AddPicture extends Component {
     this.setState({
       modalTitle: '',
       modalUrl: '',
+      modalImage: '/img/insert_image_here.png',
     });
     this.closeModal();
   }
