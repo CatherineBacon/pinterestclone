@@ -95,7 +95,7 @@ export default class AddPicture extends Component {
               <p>
                 <Image
                   src={this.state.modalImage}
-                  className="img-responsive"
+                  className="img-responsive center-block"
                   onError={this.addDefaultSrc}
                 />
               </p>
